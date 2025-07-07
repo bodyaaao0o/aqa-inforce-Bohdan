@@ -1,5 +1,3 @@
-import { validateHeaderName } from "http"
-
 const env = {
     baseUserURL: "https://automationintesting.online/"
 }
@@ -11,8 +9,8 @@ const cred = {
     validPhone: "+380687084407",
     invalidFirstName: "Om",
     invalidLastName: "AM",
-    invalidEmail: "uhezip78@.com",
-    invalidPhone: "1234567"
+    invalidEmail: "uhezip78.com",
+    invalidPhone: "123456"
 }
 
 export { env, cred }

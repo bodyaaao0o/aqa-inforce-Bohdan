@@ -7,7 +7,7 @@ export class PageManager {
     private readonly dashboardPage: DashboardPage;
     private readonly roomPage: RoomPage;
 
-    constructor(page:Page) {
+    constructor(page: Page) {
         this.page = page;
         this.dashboardPage = new DashboardPage(this.page);
         this.roomPage = new RoomPage(this.page);
@@ -20,10 +20,9 @@ export class PageManager {
     room() {
         return this.roomPage;
     };
-}
 
-export const checkVisibility = async (elements: any[]) => {
-    for(const element of elements) {
-        await expect(element).toBeVisible();
+    async goToFirstRoom() {
+        await this.dashboard().clickFirstRoomBookNowButton();
+        await this.page.waitForLoadState();
     }
 }

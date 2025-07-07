@@ -1,12 +1,15 @@
+import { randomInt } from "crypto";
+
 export default class ApiRequests {
     constructor(requestContext) {
         this.request = requestContext;
         this.token = null;
-        this.baseHeader = {
+        this.baseHeaders = {
             Origin: 'https://automationintesting.online',
             Referer: 'https://automationintesting.online/admin',
             'Content-Type': 'application/json',
         };
+        this.price = randomInt(100, 600)
     };
 
     getAuthHeader() {
@@ -130,7 +133,7 @@ export default class ApiRequests {
                 accessible: true,
                 features: ["WiFi", "TV", "Radio"],
                 roomName: "103",
-                roomPrice: "550",
+                roomPrice: this.price,
                 type: "Double",
             },
             headers: this.getAuthHeader(),
@@ -146,7 +149,7 @@ export default class ApiRequests {
         const expectedData = {
             roomName: "103",
             type: "Double",
-            roomPrice: 650,
+            roomPrice: this.price,
             accessible: true,
             features: ["WiFi", "TV", "Radio"]
         };
@@ -193,39 +196,30 @@ export default class ApiRequests {
 
     // For UI tests
 
-    async deleteBookingsInDateRange(checkinDate, checkoutDate) {
-        if (!this.token) {
-            await this.loginInAdmin();
-        }
+    async deleteBookingsForRoom(roomName, checkinDate, checkoutDate) {
+        if (!this.token) await this.loginInAdmin();
 
-        const roomsResponse = await this.request.get('https://automationintesting.online/api/room', {
-            headers: this.getAuthHeader(),
-            withCredentials: true
+        const roomsRes = await this.request.get('https://automationintesting.online/api/room', {
+            headers: this.getAuthHeader(), withCredentials: true
         });
-        const roomsJson = await roomsResponse.json();
-        const rooms = roomsJson.rooms || [];
+        const rooms = (await roomsRes.json()).rooms || [];
+        const room = rooms.find(r => r.roomName === roomName);
 
-        for (const room of rooms) {
-            const bookingResponse = await this.request.get(`https://automationintesting.online/api/booking?roomid=${room.roomid}`, {
-                headers: this.getAuthHeader(),
-                withCredentials: true
+        const bookingsRes = await this.request.get(`https://automationintesting.online/api/booking?roomid=${room.roomid}`, {
+            headers: this.getAuthHeader(), withCredentials: true
+        });
+        const bookings = (await bookingsRes.json()).bookings || [];
+
+        const toDelete = bookings.filter(b =>
+            b.bookingdates.checkin.slice(0, 10) === checkinDate &&
+            b.bookingdates.checkout.slice(0, 10) === checkoutDate
+        );
+
+        for (const b of toDelete) {
+            await this.request.delete(`https://automationintesting.online/api/booking/${b.bookingid}`, {
+                headers: this.getAuthHeader(), withCredentials: true
             });
-            const bookingJson = await bookingResponse.json();
-            const bookings = bookingJson.bookings || [];
-
-            const toDelete = bookings.filter(b =>
-                b.bookingdates.checkin === checkinDate &&
-                b.bookingdates.checkout === checkoutDate
-            );
-
-            for (const booking of toDelete) {
-                const deleteRes = await this.request.delete(`https://automationintesting.online/api/booking/${booking.bookingid}`, {
-                    headers: this.getAuthHeader(),
-                    withCredentials: true
-                });
-
-                console.log(`🧹 Deleted booking ID: ${booking.bookingid} — status: ${deleteRes.status()}`);
-            }
         }
     }
+
 }

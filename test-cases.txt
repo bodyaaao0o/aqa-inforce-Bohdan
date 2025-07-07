@@ -7,11 +7,9 @@ Pre-condition: At list one room is availabile for booking
 Steps:
  - Navigate to the site: "https://automationintesting.online/" ;
  - Scroll down to the “Our Rooms” section or click on the “Rooms” link in the top menu;
- - Check if the rooms are displayed;
  - Select one room and click on the “Book now” button in the room selection window;
  - In the “Book this room” section, select the desired booking date (click on any date and scroll in either direction to select several days)
  - Scroll to down ;
- - Check the information;
  - Click on the "Reserve Now" button;
  - Fill in the valid values for the following fields:
    - Firstname;
@@ -23,6 +21,7 @@ Steps:
 Post-condition: To delete the entered data, click the “Cancel” button;
 
 Expected result:  After entering valid data in all fields and clicking the “Book now” button, a div with a confirmed room reservation should appear;
+
 Test data:
  - Firstname: Bohdan
  - Lastname: Kupetskiy
@@ -35,6 +34,7 @@ Status: passed
 
 Automated: yes
 
+
 ID: TC002
 
 Summary: Booking a room with invalid data
@@ -44,11 +44,9 @@ Pre-condition: At least one room must be available for booking
 Steps:
  - Navigate to the site: "https://automationintesting.online/" ;
  - Scroll down to the “Our Rooms” section or click on the “Rooms” link in the top menu;
- - Check if the rooms are displayed;
  - Select one room and click on the “Book now” button in the room selection window;
  - In the “Book this room” section, select the desired booking date (click on any date and scroll in either direction to select several days)
  - Scroll to down ;
- - Check the information;
  - Click on the "Reserve Now" button;
  - Fill in the invalid values for the following fields:
    - Firstname;
@@ -73,9 +71,7 @@ Incorrect data:
  - Email: uhezip78@.com  
  - Phone: 123456
 
-Post-condition:
- - No room is booked
- - Booking form stays on screen with data for correction
+Post-condition: Refresh the page;
 
 Priority: High
 
@@ -88,20 +84,20 @@ ID:TC003
 
 Summary: Check whether previously booked dates are displayed as “Unavailable”
 
+Pre-condition: At list one room is availabile for booking
+
 Steps:
  - Navigate to the website: https://automationintesting.online/
  - Scroll down to the Our Rooms section or click on the Rooms link in the top navigation bar
- - Verify that available rooms are displayed
  - Select any room and click the Book Now button
- - In the Book This Room section, open the calendar to view booking dates
- - Look for the dates that were previously booked
+ - In the Book This Room section, go to the calendar to view booking dates
+ - Try to select the dates that were previously booked
 
 Expected Result:
 Reserved dates should be marked as “Unavailable” in the calendar and should not be clickable or selectable by the user.
 
-Post-condition:
- - No new reservations are created
- - Unavailable dates must be visible
+Post-condition: Refresh the page;
+
 
 Comments:
 Currently, if a user selects a date that is already booked, the message “Unavailable” is displayed very poorly. This is a UI issue.

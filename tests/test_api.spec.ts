@@ -1,7 +1,7 @@
 import { test } from '@playwright/test';
 import ApiRequests from '../support/APIRequests';
 
-test('🔁 Full API room lifecycle', async ({ request }) => {
+test('Full API room lifecycle', async ({ request }) => {
     const api = new ApiRequests(request);
     
     //Log in
