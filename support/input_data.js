@@ -17,8 +17,7 @@ export const fillInvalidBookingData = async(pm, data) => {
 
 export const verifyBookingRequestPayload = (request, expected) => {
     const payload = request.postDataJSON();
-    console.log('📦 Booking payload:', payload);
-
+    
     expect(payload.firstname).toBe(expected.validFirstName);
     expect(payload.lastname).toBe(expected.validLastName);
     expect(payload.email).toBe(expected.validEmail);
